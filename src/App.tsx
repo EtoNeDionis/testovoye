@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect} from 'react';
+import AppRouter from "./router/AppRouter";
+import Nav from "./components/Nav";
+import {useAppDispatch} from "./hooks/useTypedSelector";
+import {userFetching, userFetchingSuccess} from "./store/reducers/user/userSlice";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const dispatch = useAppDispatch()
+    useEffect(() => {
+        if(localStorage.getItem('user')){
+            dispatch(userFetching())
+            const user = JSON.parse(localStorage.getItem('user') || '')
+            dispatch(userFetchingSuccess(user))
+        }
+    }, [])
+    return (
+        <div>
+            <Nav/>
+            <AppRouter/>
+        </div>
+    );
+};
 
 export default App;
